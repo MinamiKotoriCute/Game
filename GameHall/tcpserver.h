@@ -12,11 +12,13 @@ public:
     ~TcpServer();
 
 
+
 signals:
     void finished();
+    void newConnection(QTcpSocket *newConnectSocket);
 
 public slots:
-    void start();
+    void start();   //thread start call this
 
 protected:
     void incomingConnection(qintptr socketDescriptor);

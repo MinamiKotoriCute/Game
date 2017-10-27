@@ -1,17 +1,20 @@
 #include "gamehall.h"
 
+#include <functional>
+
 #include <QDebug>
 #include <QTimer>
 #include <QThread>
+#include <QTcpSocket>
 
 #include "tcpserver.h"
 
-GameHall::GameHall()
+GameHall::GameHall() : server(new TcpServer)
 {
-    qDebug() << "GameHall";
-    server = nullptr;
+    connect(server, &TcpServer::newConnection, this, &GameHall::newConnection);
+    connect(this, &GameHall::listen, server, [this](const QHostAddress &address, quint16 port){server->listen(address, port);});
 
-    startServer();
+    startServerThread();
 }
 
 GameHall::~GameHall()
@@ -19,13 +22,9 @@ GameHall::~GameHall()
     qDebug() << "~GameHall";
 }
 
-void GameHall::startServer()
+void GameHall::startServerThread()
 {
-    if(server)
-        delete server;
-
     QThread *thread = new QThread;
-    server = new TcpServer;
     server->moveToThread(thread);
     connect(thread, &QThread::started, server, &TcpServer::start);
     connect(server, &TcpServer::destroyed, thread, &QThread::quit);
@@ -34,15 +33,15 @@ void GameHall::startServer()
     thread->start();
 }
 
-void GameHall::print()
+void GameHall::newConnection(QTcpSocket *newConnectSocket)
 {
-    qDebug() << "GameHall::print";
-
-    QTimer::singleShot(1000, [=](){
-        qDebug() << "QTimer";
-        if(add){
-            qDebug() << add;
-            add(1,2);
-        }
+    qDebug() << "server\t" << "new connect";
+    connect(newConnectSocket, &QTcpSocket::readyRead, this, [this, newConnectSocket](){
+        this->getMessageFromClient(newConnectSocket);
     });
+}
+
+void GameHall::getMessageFromClient(QTcpSocket *socket)
+{
+    qDebug() << "server\t" << "GameHall::getMessageFromClient" << socket->readAll();
 }

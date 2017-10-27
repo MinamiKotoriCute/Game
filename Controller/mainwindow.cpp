@@ -12,13 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     createGameHallFunction f = (createGameHallFunction)lib.resolve("CreateGameHall");
     if(f){
         GameHallInterface *it = f();
-        it->add = [](int a, int b){
-            qDebug() << "a=" << a << " b=" << b;
-        };
-        qDebug() << it->add;
-        it->print();
-        //delete it;
-        //it->deleteLater();
+        it->listen(QHostAddress::AnyIPv4, 9487);
     }
 }
 
