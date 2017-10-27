@@ -1,4 +1,5 @@
 #include "gamehall.h"
+#include "../Common/globaldefine.h"
 
 #include <functional>
 
@@ -43,5 +44,14 @@ void GameHall::newConnection(QTcpSocket *newConnectSocket)
 
 void GameHall::getMessageFromClient(QTcpSocket *socket)
 {
-    qDebug() << "server\t" << "GameHall::getMessageFromClient" << socket->readAll();
+    QByteArray rawData = socket->readAll();
+#ifndef QT_NO_INFO_OUTPUT
+    qInfo() << "recive from client: " << rawData.mid(0, INFO_NETWORK_RECIVE_SHOW_BYTES) << rawData.mid(0, INFO_NETWORK_RECIVE_SHOW_BYTES).toHex();
+#else
+#ifndef QT_NO_DEBUG_OUTPUT
+    qDebug() << QString("recive from server, %d bytes.").arg(rawData.size());
+#endif  //QT_NO_DEBUG_OUTPUT
+#endif  //QT_NO_INFO_OUTPUT
+
+    socket->write("i see you, form server.");
 }

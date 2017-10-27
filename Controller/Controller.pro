@@ -32,4 +32,4 @@ HEADERS += \
         mainwindow.h \
     loader.h
 
-DESTDIR=../bin
+DESTDIR=../bin/server

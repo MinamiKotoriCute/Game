@@ -4,4 +4,5 @@ CONFIG+=ordered
 
 SUBDIRS += \
     GameHall\
-    Controller
+    Controller \
+    Client

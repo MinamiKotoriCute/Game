@@ -15,14 +15,14 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-    QTimer::singleShot(5000, []{
+    /*QTimer::singleShot(1000, []{
         qDebug() << "client\t" << "connect to host";
         QTcpSocket *socket = new QTcpSocket;
         socket->connectToHost(QHostAddress::LocalHost, 9487);
 
         qDebug() << "client\t" << "write";
         socket->write("hello");
-    });
+    });*/
 
     return a.exec();
 }
