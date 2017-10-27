@@ -7,6 +7,8 @@
 
 #include "tcpserver.h"
 
+class TcpSocket;
+
 class GameHall : public GameHallInterface
 {
     Q_OBJECT
@@ -20,13 +22,12 @@ signals:
     bool listen(const QHostAddress &address = QHostAddress::Any, quint16 port = 0) override;
 
 protected slots:
-    void newConnection(QTcpSocket *newConnectSocket);
-    void getMessageFromClient(QTcpSocket *socket);
+    void newConnection(TcpSocket *newConnectSocket);
+    void getMessageFromClient(TcpSocket *socket, QByteArray r_message);
 
 private:
     TcpServer *server;
 };
 
-Q_DECLARE_METATYPE(QHostAddress)
 
 #endif // GAMEHALL_H

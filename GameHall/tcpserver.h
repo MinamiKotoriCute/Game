@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QTcpServer>
 
+class TcpSocket;
+
 class TcpServer : public QTcpServer
 {
     Q_OBJECT
@@ -15,7 +17,7 @@ public:
 
 signals:
     void finished();
-    void newConnection(QTcpSocket *newConnectSocket);
+    void newConnection(TcpSocket *newConnectSocket);
 
 public slots:
     void start();   //thread start call this

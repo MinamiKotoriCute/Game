@@ -9,6 +9,7 @@
 #include <QTcpSocket>
 
 #include "tcpserver.h"
+#include "tcpsocket.h"
 
 GameHall::GameHall() : server(new TcpServer)
 {
@@ -34,17 +35,20 @@ void GameHall::startServerThread()
     thread->start();
 }
 
-void GameHall::newConnection(QTcpSocket *newConnectSocket)
+void GameHall::newConnection(TcpSocket *newConnectSocket)
 {
-    qDebug() << "server\t" << "new connect";
-    connect(newConnectSocket, &QTcpSocket::readyRead, this, [this, newConnectSocket](){
-        this->getMessageFromClient(newConnectSocket);
+    connect(newConnectSocket, &TcpSocket::reciveMessage, [](){
+        qDebug() << "get" << QThread::currentThread();
+    });
+    connect(newConnectSocket, &TcpSocket::reciveMessage, this, [this, newConnectSocket](QByteArray r_message){
+        this->getMessageFromClient(newConnectSocket, r_message);
+        qDebug() << "get2" << QThread::currentThread();
     });
 }
 
-void GameHall::getMessageFromClient(QTcpSocket *socket)
+void GameHall::getMessageFromClient(TcpSocket *socket, QByteArray r_message)
 {
-    QByteArray rawData = socket->readAll();
+    QByteArray rawData = r_message;
 #ifndef QT_NO_INFO_OUTPUT
     qInfo() << "recive from client: " << rawData.mid(0, INFO_NETWORK_RECIVE_SHOW_BYTES) << rawData.mid(0, INFO_NETWORK_RECIVE_SHOW_BYTES).toHex();
 #else
@@ -53,5 +57,5 @@ void GameHall::getMessageFromClient(QTcpSocket *socket)
 #endif  //QT_NO_DEBUG_OUTPUT
 #endif  //QT_NO_INFO_OUTPUT
 
-    socket->write("i see you, form server.");
+    //socket->write("i see you, form server.");
 }

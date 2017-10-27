@@ -4,6 +4,8 @@
 #
 #-------------------------------------------------
 
+include( ../common/common.pri )
+
 QT       += network
 
 QT       -= gui

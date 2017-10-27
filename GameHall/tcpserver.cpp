@@ -6,6 +6,8 @@
 
 #include <QCoreApplication>
 
+#include "tcpsocket.h"
+
 TcpServer::TcpServer(QObject *parent) : QTcpServer(parent)
 {
     qDebug() << "TcpServer main thread" << QThread::currentThread() << " id " << QThread::currentThreadId();
@@ -23,13 +25,11 @@ void TcpServer::start()
 
 void TcpServer::incomingConnection(qintptr socketDescriptor)
 {
-    QTcpSocket *socket = new QTcpSocket;
+    qDebug() << socketDescriptor << sizeof(qintptr);
+    //TcpSocket *socket = new TcpSocket(QThread::currentThread());
+    TcpSocket *socket = new TcpSocket();
+    socket->setSocketDescriptor(socketDescriptor);
 
-    //initialize fail
-    if(socket->setSocketDescriptor(socketDescriptor) == false){
-        qDebug() << "socket initialize fail. " << __FUNCTION__ << __LINE__;
-        return;
-    }
-
+    qDebug() << "server\t" << "new connect" << QThread::currentThread();
     emit newConnection(socket);
 }
