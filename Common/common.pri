@@ -1,5 +1,7 @@
 PROJECT_PATH = $$PWD
 
+QT       += network
+
 INCLUDEPATH += $${PROJECT_PATH}
 
 HEADERS  += $${PROJECT_PATH}\logcontroller.h \

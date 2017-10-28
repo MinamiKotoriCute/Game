@@ -13,8 +13,6 @@ public:
     explicit TcpServer(QObject *parent = nullptr);
     ~TcpServer();
 
-
-
 signals:
     void finished();
     void newConnection(TcpSocket *newConnectSocket);

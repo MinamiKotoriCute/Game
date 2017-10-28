@@ -37,12 +37,11 @@ void GameHall::startServerThread()
 
 void GameHall::newConnection(TcpSocket *newConnectSocket)
 {
-    connect(newConnectSocket, &TcpSocket::reciveMessage, [](){
-        qDebug() << "get" << QThread::currentThread();
-    });
     connect(newConnectSocket, &TcpSocket::reciveMessage, this, [this, newConnectSocket](QByteArray r_message){
         this->getMessageFromClient(newConnectSocket, r_message);
-        qDebug() << "get2" << QThread::currentThread();
+    });
+    connect(newConnectSocket, &TcpSocket::disconnected, this, [](){
+        qDebug() << "[GameHall] disconnected";
     });
 }
 
@@ -57,5 +56,5 @@ void GameHall::getMessageFromClient(TcpSocket *socket, QByteArray r_message)
 #endif  //QT_NO_DEBUG_OUTPUT
 #endif  //QT_NO_INFO_OUTPUT
 
-    //socket->write("i see you, form server.");
+    socket->sendMessage("i see you, form server.");
 }

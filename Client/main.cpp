@@ -4,7 +4,7 @@
 
 #include <QTimer>
 
-#include "network.h"
+#include "tcpsocket.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,11 +16,11 @@ int main(int argc, char *argv[])
     w.show();
 
     QTimer::singleShot(1000, []{
-        Network *network = new Network;
-        network->connectToHost(QHostAddress("127.0.0.1"), 9487);
+        TcpSocket *socket = new TcpSocket;
+        socket->connectToHost(QHostAddress("127.0.0.1"), 9487);
 
         QTimer::singleShot(1000, [=]{
-            network->sendToServer("Hello, form client");
+            socket->sendMessage("Hello, form client");
         });
     });
 
